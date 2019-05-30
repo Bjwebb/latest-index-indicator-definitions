@@ -177,6 +177,47 @@ def then_at_least_x_chars(xml, xpath_expression, reqd_chars, **kwargs):
     return xml
 
 
+@then(r'`([^`]+)` should have at least (\d+) characters')
+def then_at_least_x_chars(xml, xpath_expression, reqd_chars, **kwargs):
+    reqd_chars = int(reqd_chars)
+    vals = xml.xpath(xpath_expression)
+    if len(vals) == 0:
+        msg = '`{}` not found'.format(xpath_expression)
+        raise StepException(msg)
+
+    most_chars, most_str = max([(len(val.strip()), val) for val in vals])
+    result = most_chars >= reqd_chars
+
+    if not result:
+        msg = '`{}` has fewer than {} characters (it has {})'.format(
+            xpath_expression,
+            reqd_chars,
+            most_chars,
+        )
+        raise StepException(msg)
+    return xml
+
+@then(r'`([^`]+)` should have at least (\d+) characters')
+def then_at_least_x_chars(xml, xpath_expression, reqd_chars, **kwargs):
+    reqd_chars = int(reqd_chars)
+    vals = xml.xpath(xpath_expression)
+    if len(vals) == 0:
+        msg = '`{}` not found'.format(xpath_expression)
+        raise StepException(msg)
+
+    most_chars, most_str = max([(len(val.strip()), val) for val in vals])
+    result = most_chars >= reqd_chars
+
+    if not result:
+        msg = '`{}` has fewer than {} characters (it has {})'.format(
+            xpath_expression,
+            reqd_chars,
+            most_chars,
+        )
+        raise StepException(msg)
+    return xml
+
+
 @given(r'`([^`]+)` is one of ((?:\w+, )*\w+ or \w+)')
 def given_is_one_of_consts(xml, xpath_expression, consts, **kwargs):
     consts_list = re.split(r', | or ', consts)
